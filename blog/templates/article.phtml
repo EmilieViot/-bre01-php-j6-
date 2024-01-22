@@ -1,0 +1,48 @@
+<?php
+$category = null;
+$post = null;
+    
+require "config/connexion.php";
+
+if(isset(isset($_GET["category"]) && isset($_GET["post"]))
+{
+    $category = $_GET["category"];
+    $postNb = $_GET["post"];
+
+    $query = $db->prepare('SELECT * FROM posts WHERE category = :category AND post_number = :postNb');
+    $parameters = [
+        'category' => $category
+        'postNb' => $postNb
+    ];
+    $query->execute($parameters);
+    $post = $query->fetch(PDO::FETCH_ASSOC);
+}
+?>
+
+<main id="post">
+    <article class="container mb-5">
+        <?php
+        if($post !== null)
+        {
+            ?>
+            <header>
+                <img class="img-fluid" src="https://picsum.photos/id/17/2000/600" alt="iage d'illustration" />
+                <h1 class="my-5">
+                    <?= $post["titre"]; ?>
+                </h1>
+            </header>
+            <section>
+                <?=  $post["contenu"]; ?>
+            </section>
+            <?php
+        }
+        else
+        {
+            ?>
+        <p>The post does not exist.</p>
+        <?php
+        }
+        ?>
+    </article>
+
+</main>
